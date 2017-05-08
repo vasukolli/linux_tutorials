@@ -1,0 +1,44 @@
+interactive shell – This is a shell sessions used for running commands interactively via the command line.
+
+login shell – This is a shell sessions used running a shell script inside it.
+
+In user home directory:
+
+/etc/profile
+       The systemwide initialization file, executed for login shells
+~/.bash_profile
+       The personal initialization file, executed for login shells
+~/.bashrc
+       The individual per-interactive-shell startup file
+~/.bash_logout
+       The individual login shell cleanup file, executed when a login shell exits
+       
+All the following let’s you switch user, and switch into a login shell:
+
+    su - {username}
+    su -l {username}
+    su --login {username}
+If you want to su into an interactive shell, you do:
+
+$ su {username}
+
+FROM GNU BASH MANUAL
+
+A login shell is a shell where you login. You can recognize a login shell from a ps -f listing, it will have a hyphen at the start of the program name, for example:
+
+root      3561  3553  0 09:38 pts/0    00:00:00 -bash
+qa        7327  3432  0 10:46 pts/1    00:00:00 -bash
+
+An interactive shell is one which reads commands from it's standard-input, usually a terminal.
+
+Once a match is found, the other files are ignored, even if they exist. The /etc/bashrc file might be used by both the ~/.bash_profile and the ~/.bashrc files. That would mean that the /etc/bashrc file is sourced on all interactive invocations of bash, whether it is a login or non-login shell.
+
+So, the .bashrc file is also run every time you request a new interactive shell. This does not include a shell script. Normally variables, aliases or functions are placed in this file.
+
+Bash shell scripts read a different file if suitably instructed. If the user defines (usually in their own .bash_profile) a variable BASH_ENV which contains a filename, scripts will read this. If this variable is not set (and exported) then bash scripts will not read any startup files. 
+
+
+
+Since you probably know what a "shell" is and are using it your question only targets the difference between login shell and everything else...
+
+A login shell only differs from any other shell by the fact that one or more initial setup scripts (resources) are loaded on startup, typically named with "profile" in their name. in there basic settings are defined that are derived to subsequently opened shells (so they only need to be defined once).

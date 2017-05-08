@@ -42,3 +42,51 @@ Bash shell scripts read a different file if suitably instructed. If the user def
 Since you probably know what a "shell" is and are using it your question only targets the difference between login shell and everything else...
 
 A login shell only differs from any other shell by the fact that one or more initial setup scripts (resources) are loaded on startup, typically named with "profile" in their name. in there basic settings are defined that are derived to subsequently opened shells (so they only need to be defined once).
+
+Whenever a new user is created, by default, a set of (usually hidden) config files will get copied to the user’s new home folder. These files are actually duplicate of all the files contained in the following directory:
+
+/etc/skel
+
+i.e. :
+
+$ ls -l /etc/skel/
+
+total 6
+
+-rw-r–r–   1 root     sys              136 Nov 9 2006 local.cshrc
+
+-rw-r–r–   1 root     sys              157 Nov 9 2006 local.login
+
+-rw-r–r–   1 root     sys              174 Nov 9 2006 local.profile
+
+the useradd commands automatically copies all the content from this folder and places it in the user’s home directory.
+
+when a user logs into a RHEL machine (using username and password), the following scripts are executed automatically (in this order):
+
+/etc/profile       # (this sets up user env variables, e.g. path, hostname, histsize….etc)…this script will also trigger:
+
+/etc/profile.d     # (directory containing lots of other files.
+
+{user’s home folder}/.bash_profile # can be used to add your own stuff including overriding what was set in the /etc/profile script.
+
+{user’s home folder}/.bashrc     # (used for setting local variables e.g. the PS1 variables)
+
+ 
+
+However these does get executed when a non-login shell is generated. a non-login shell is a shell that gets opened buit without getting a username/password prompt. Here are some ways to start a non-login shell:
+
+–         Applications=>system tools=>terminal
+
+–        When you start a shell script, linux will automatically create a new shell for that script to run in, and this new shell is a non-login shell.
+
+–         At the command line, type ksh, followed by bash.
+
+In a non-login shell the following scripts are run:
+
+ 
+
+1. {user’s home folder}/bashrc,
+
+2. /etc/bashrc,
+
+3. /etc/profile.d (have a look through these script to familiarize yourself)
